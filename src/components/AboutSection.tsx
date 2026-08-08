@@ -1,6 +1,8 @@
 import React from 'react';
 import { IconCloudDemo } from './ui/demo';
+import { OptimizedImage } from './OptimizedImage';
 import aboutImage from '../assets/images/about_architecture_1785673852783.jpg';
+import aboutImageWebp from '../assets/images/about_architecture_1785673852783.webp';
 
 export const AboutSection: React.FC = () => {
   return (
@@ -45,8 +47,9 @@ export const AboutSection: React.FC = () => {
           {/* COLUMN 1: CLEAN ARCHITECTURAL VISUAL ASSET */}
           <div className="w-full flex flex-col items-center justify-center">
             <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-neutral-200 shadow-sm border border-black/5">
-              <img
+              <OptimizedImage
                 src={aboutImage}
+                webp={aboutImageWebp}
                 alt="Futuristic Architectural Pavilion Design"
                 className="w-full h-full object-cover grayscale-[10%] hover:grayscale-0 transition-all duration-700 ease-out"
                 loading="lazy"

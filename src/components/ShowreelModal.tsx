@@ -1,6 +1,8 @@
 import React from 'react';
 import { X, Play, Volume2, Sparkles, Film } from 'lucide-react';
+import { OptimizedImage } from './OptimizedImage';
 import showreelThumb from '../assets/images/showreel_thumb_1785664053900.jpg';
+import showreelThumbWebp from '../assets/images/showreel_thumb_1785664053900.webp';
 
 interface ShowreelModalProps {
   isOpen: boolean;
@@ -31,8 +33,9 @@ export const ShowreelModal: React.FC<ShowreelModalProps> = ({ isOpen, onClose })
 
         {/* Video Stage / Preview Content */}
         <div className="relative aspect-video w-full bg-black flex items-center justify-center group overflow-hidden">
-          <img
+          <OptimizedImage
             src={showreelThumb}
+            webp={showreelThumbWebp}
             alt="Showreel Preview"
             className="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-700"
             loading="lazy"

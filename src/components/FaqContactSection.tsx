@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, CheckCircle2 } from 'lucide-react';
+import { OptimizedImage } from './OptimizedImage';
 
-import aboutArchitectureImg from '../assets/images/about_architecture_1785673852783.jpg';
 import section6RightImage from '../assets/images/section6_right_image.png';
+import section6RightImageWebp from '../assets/images/section6_right_image.webp';
 
 interface FaqItem {
   id: string;
@@ -156,8 +157,9 @@ export const FaqContactSection: React.FC = () => {
 
               {/* NEW SECTION 7 RIGHT IMAGE */}
               <div className="w-36 sm:w-44 h-36 sm:h-44 overflow-hidden shrink-0 pointer-events-none z-10 -mt-2">
-                <img
+                <OptimizedImage
                   src={section6RightImage}
+                  webp={section6RightImageWebp}
                   alt="Section 6 Right Image"
                   className="w-full h-full object-cover object-center filter contrast-[1.05]"
                   loading="lazy"

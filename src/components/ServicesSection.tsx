@@ -1,14 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'motion/react';
+import { OptimizedImage } from './OptimizedImage';
 
 // Import high quality generated assets
 import webDesignImg from '../assets/images/service_web_design_1785678016624.jpg';
+import webDesignImgWebp from '../assets/images/service_web_design_1785678016624.webp';
 import webDevImg from '../assets/images/service_web_dev_1785678035261.jpg';
+import webDevImgWebp from '../assets/images/service_web_dev_1785678035261.webp';
 import brandStrategyImg from '../assets/images/service_brand_strategy_1785678050686.jpg';
+import brandStrategyImgWebp from '../assets/images/service_brand_strategy_1785678050686.webp';
 import visualIdentityImg from '../assets/images/service_visual_identity_1785678066566.jpg';
+import visualIdentityImgWebp from '../assets/images/service_visual_identity_1785678066566.webp';
 import motion3dImg from '../assets/images/service_motion_3d_1785678083789.jpg';
+import motion3dImgWebp from '../assets/images/service_motion_3d_1785678083789.webp';
 import contentArtImg from '../assets/images/service_content_art_1785678105992.jpg';
+import contentArtImgWebp from '../assets/images/service_content_art_1785678105992.webp';
 
 interface ServiceItem {
   id: string;
@@ -16,6 +23,7 @@ interface ServiceItem {
   title: string;
   description: string;
   image: string;
+  webp: string;
   // Staggered layout parameters for desktop
   widthClass: string;
   alignClass: string;
@@ -29,6 +37,7 @@ const SERVICES_DATA: ServiceItem[] = [
     title: 'WEB DESIGN',
     description: 'UX/UI, DESIGN SYSTEMS, PROTOTYPES',
     image: webDesignImg,
+    webp: webDesignImgWebp,
     widthClass: 'w-full md:w-[90%]',
     alignClass: 'mr-auto ml-0',
     descPosition: 'right',
@@ -39,6 +48,7 @@ const SERVICES_DATA: ServiceItem[] = [
     title: 'WEB DEVELOPMENT',
     description: 'FRAMER/NEXT.JS, CMS, ANALYTICS',
     image: webDevImg,
+    webp: webDevImgWebp,
     widthClass: 'w-full md:w-[98%]',
     alignClass: 'ml-auto mr-0',
     descPosition: 'left',
@@ -49,6 +59,7 @@ const SERVICES_DATA: ServiceItem[] = [
     title: 'BRAND STRATEGY',
     description: 'CREATE HISTORY AND VALUES',
     image: brandStrategyImg,
+    webp: brandStrategyImgWebp,
     widthClass: 'w-full md:w-[93%]',
     alignClass: 'mr-auto ml-0',
     descPosition: 'right',
@@ -59,6 +70,7 @@ const SERVICES_DATA: ServiceItem[] = [
     title: 'VISUAL IDENTITY',
     description: 'LOGO, VISUAL SYSTEM, GUIDELINES',
     image: visualIdentityImg,
+    webp: visualIdentityImgWebp,
     widthClass: 'w-full md:w-[99%]',
     alignClass: 'ml-auto mr-0',
     descPosition: 'left',
@@ -69,6 +81,7 @@ const SERVICES_DATA: ServiceItem[] = [
     title: 'MOTION & 3D',
     description: 'ANIMATION, MICRO-INTERACTIONS, LAUNCH VISUALS',
     image: motion3dImg,
+    webp: motion3dImgWebp,
     widthClass: 'w-full md:w-[95%]',
     alignClass: 'mr-auto ml-0',
     descPosition: 'right',
@@ -79,6 +92,7 @@ const SERVICES_DATA: ServiceItem[] = [
     title: 'CONTENT & ART',
     description: 'COPY, PHOTO, VIDEO',
     image: contentArtImg,
+    webp: contentArtImgWebp,
     widthClass: 'w-full md:w-[92%]',
     alignClass: 'ml-auto mr-0',
     descPosition: 'left',
@@ -262,8 +276,9 @@ export const ServicesSection: React.FC = () => {
                         className="md:hidden px-6 pb-6 pt-2 overflow-hidden border-t border-white/10"
                       >
                         <div className="w-full aspect-[4/3] rounded-xl overflow-hidden shadow-md">
-                          <img 
+                          <OptimizedImage 
                             src={service.image} 
+                            webp={service.webp} 
                             alt={service.title} 
                             className="w-full h-full object-cover" 
                             loading="lazy"
@@ -303,8 +318,9 @@ export const ServicesSection: React.FC = () => {
               }}
               className="hidden md:block fixed pointer-events-none z-50 top-0 left-0 w-60 h-80 sm:w-64 sm:h-84 rounded-2xl overflow-hidden border-2 border-white/40 shadow-2xl shadow-black/60 bg-black/50 backdrop-blur-md"
             >
-              <img 
+              <OptimizedImage 
                 src={activeService.image} 
+                webp={activeService.webp} 
                 alt={activeService.title} 
                 className="w-full h-full object-cover grayscale-[10%] contrast-[1.05]" 
                 loading="lazy"

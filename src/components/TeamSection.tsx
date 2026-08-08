@@ -1,9 +1,13 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { SitePath } from '../site';
+import { OptimizedImage } from './OptimizedImage';
 import alexPhoto from '../../project images/Alex.jpg';
+import alexPhotoWebp from '../../project images/Alex.webp';
 import nakashimaPhoto from '../../project images/Nakashima.jpg';
+import nakashimaPhotoWebp from '../../project images/Nakashima.webp';
 import oleksandrPhoto from '../../project images/Oleksandr.jpg';
+import oleksandrPhotoWebp from '../../project images/Oleksandr.webp';
 
 interface TeamMember {
   id: string;
@@ -12,6 +16,7 @@ interface TeamMember {
   company: string;
   quote: string;
   image: string;
+  imageWebp: string;
   side: 'left' | 'right';
 }
 
@@ -23,6 +28,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     company: 'NDA Studio',
     quote: '"True engineering is not just building code, but crafting reliable systems that transform complex requirements into seamless digital experiences."',
     image: alexPhoto,
+    imageWebp: alexPhotoWebp,
     side: 'left',
   },
   {
@@ -32,6 +38,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     company: 'NDA Studio',
     quote: '"We create immersive interfaces with the precision of architects—ensuring interactive performance and invisible elegance across every platform."',
     image: nakashimaPhoto,
+    imageWebp: nakashimaPhotoWebp,
     side: 'right',
   },
   {
@@ -41,6 +48,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     company: 'NDA Studio',
     quote: '"A project workflow should feel like a well-orchestrated symphony—clear, deliberate, and deeply aligned from planning to final delivery."',
     image: oleksandrPhoto,
+    imageWebp: oleksandrPhotoWebp,
     side: 'left',
   },
 ];
@@ -114,8 +122,9 @@ export function TeamSection({ onNavigate }: TeamSectionProps) {
                       className="flex items-center gap-4"
                     >
                       <div className="relative overflow-hidden rounded-[14px] border border-black/10 shadow-sm shrink-0">
-                        <img
+                        <OptimizedImage
                           src={member.image}
+                          webp={member.imageWebp}
                           alt={member.name}
                           className="h-[76px] w-[76px] object-cover grayscale contrast-110"
                           loading="lazy"
@@ -195,8 +204,9 @@ export function TeamSection({ onNavigate }: TeamSectionProps) {
                         className="flex items-center justify-end"
                       >
                         <div className="relative group overflow-hidden rounded-[14px] border border-black/10 shadow-sm transition-transform duration-500 ease-out hover:scale-105">
-                          <img
+                          <OptimizedImage
                             src={member.image}
+                            webp={member.imageWebp}
                             alt={member.name}
                             className="w-24 h-24 sm:w-28 sm:h-28 object-cover grayscale contrast-110 group-hover:grayscale-0 transition-all duration-500"
                             loading="lazy"
@@ -223,8 +233,9 @@ export function TeamSection({ onNavigate }: TeamSectionProps) {
                         className="flex items-center justify-start"
                       >
                         <div className="relative group overflow-hidden rounded-[14px] border border-black/10 shadow-sm transition-transform duration-500 ease-out hover:scale-105">
-                          <img
+                          <OptimizedImage
                             src={member.image}
+                            webp={member.imageWebp}
                             alt={member.name}
                             className="w-24 h-24 sm:w-28 sm:h-28 object-cover grayscale contrast-110 group-hover:grayscale-0 transition-all duration-500"
                             loading="lazy"

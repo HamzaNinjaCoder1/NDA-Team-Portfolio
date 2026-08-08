@@ -1,6 +1,8 @@
 import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
+import { OptimizedImage } from './OptimizedImage';
 import aboutImage from '../assets/images/about_architecture_1785673852783.jpg';
+import aboutImageWebp from '../assets/images/about_architecture_1785673852783.webp';
 
 const fade = { duration: 0.65, ease: [0.16, 1, 0.3, 1] as const };
 const Reveal = ({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) => <motion.div className={className} initial={{ opacity: 0, y: 24, filter: 'blur(5px)' }} whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }} viewport={{ once: true, margin: '0px 0px -60px 0px', amount: .1 }} transition={{ ...fade, delay }}>{children}</motion.div>;
@@ -22,7 +24,7 @@ export function AboutPage() {
 
     <section className="bg-black px-6 py-14 text-white sm:px-10 sm:py-20 lg:px-14">
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[.8fr_1.2fr] md:gap-16">
-        <Reveal><div className="aspect-[4/3] overflow-hidden"><img src={aboutImage} alt="NDA approach to considered digital work" className="h-full w-full object-cover grayscale transition duration-700 hover:scale-105 hover:grayscale-0" loading="lazy" decoding="async" /></div></Reveal>
+        <Reveal><div className="aspect-[4/3] overflow-hidden"><OptimizedImage src={aboutImage} webp={aboutImageWebp} alt="NDA approach to considered digital work" className="h-full w-full object-cover grayscale transition duration-700 hover:scale-105 hover:grayscale-0" loading="lazy" decoding="async" /></div></Reveal>
         <Reveal delay={.08}><div className="flex h-full flex-col justify-between"><div><p className="font-mono text-[10px] font-bold tracking-[.16em] text-white/45">WHAT GUIDES US</p><h2 className="mt-6 max-w-2xl text-4xl leading-[.95] tracking-[-.05em] sm:text-6xl">Quietly rigorous. Genuinely collaborative.</h2><p className="mt-7 max-w-xl text-base leading-7 text-white/60">The people shaping the work are the people accountable for delivering it. That keeps conversations direct, decisions visible, and quality close to the surface.</p></div><a href="/team" className="mt-12 inline-flex w-fit items-center gap-3 border-b border-white/40 pb-2 font-mono text-xs font-bold tracking-wide transition-colors hover:border-white">MEET THE TEAM <ArrowUpRight size={15} /></a></div></Reveal>
       </div>
     </section>

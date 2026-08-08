@@ -1,17 +1,23 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { SitePath } from '../site';
+import { OptimizedImage } from './OptimizedImage';
 
 // Import project images
 import musicRacingImage from '../../project images/Music Racing.jpg';
+import musicRacingImageWebp from '../../project images/Music Racing.webp';
 import rajampoImage from '../../project images/rajampo.jpg';
+import rajampoImageWebp from '../../project images/rajampo.webp';
 import evermergeImage from '../../project images/EverMerge.jpg';
-import doctoreImage from '../../project images/Lotus car.png';
+import evermergeImageWebp from '../../project images/EverMerge.webp';
+import doctoreImage from '../../project images/Lotus car.jpg';
+import doctoreImageWebp from '../../project images/Lotus car.webp';
 
 interface ProjectCardData {
   id: string;
   title: string;
   image: string;
+  webp: string;
   tags: string[];
   imageHeightClass: string;
 }
@@ -21,6 +27,7 @@ const CENTER_COLUMN_PROJECTS: ProjectCardData[] = [
     id: 'music-racing',
     title: 'MUSIC RACING GT',
     image: musicRacingImage,
+    webp: musicRacingImageWebp,
     tags: ['RACING GAME', 'UNITY', 'C#'],
     imageHeightClass: 'h-[170px] sm:h-[200px] lg:h-[230px]',
   },
@@ -28,6 +35,7 @@ const CENTER_COLUMN_PROJECTS: ProjectCardData[] = [
     id: 'rajampo',
     title: 'RAJAMPO',
     image: rajampoImage,
+    webp: rajampoImageWebp,
     tags: ['DIGITAL PRODUCT', 'REACT', 'NODE.JS'],
     imageHeightClass: 'h-[200px] sm:h-[250px] lg:h-[280px]',
   },
@@ -38,6 +46,7 @@ const RIGHT_COLUMN_PROJECTS: ProjectCardData[] = [
     id: 'evermerge',
     title: 'EVERMERGE',
     image: evermergeImage,
+    webp: evermergeImageWebp,
     tags: ['MOBILE GAME', 'UNITY', 'C#'],
     imageHeightClass: 'h-[200px] sm:h-[250px] lg:h-[280px]',
   },
@@ -45,6 +54,7 @@ const RIGHT_COLUMN_PROJECTS: ProjectCardData[] = [
     id: 'doctore',
     title: 'DOCTORE',
     image: doctoreImage,
+    webp: doctoreImageWebp,
     tags: ['HEALTH PLATFORM', 'REACT', 'CLOUD'],
     imageHeightClass: 'h-[170px] sm:h-[200px] lg:h-[230px]',
   },
@@ -70,8 +80,9 @@ const ProjectCard: React.FC<{ project: ProjectCardData; onNavigate: (path: SiteP
   >
     {/* Image Wrapper */}
     <div className={`w-full ${project.imageHeightClass} relative overflow-hidden bg-neutral-200`}>
-      <img
+      <OptimizedImage
         src={project.image}
+        webp={project.webp}
         alt={project.title}
         className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
         loading="lazy"

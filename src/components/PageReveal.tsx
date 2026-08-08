@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
+import { useImagesLoaded } from '../hooks/useImagesLoaded';
+import { HOME_IMAGE_SOURCES } from '../assets/homeImages';
 
 const STORAGE_KEY = 'nda-page-reveal-seen';
 const FULL_MOTION_MS = 3000;
 const REDUCED_MOTION_MS = 520;
 const SCENE_FALLBACK_MS = 2200;
-const IMAGES_MAX_WAIT_MS = 4200;
+const IMAGES_MAX_WAIT_MS = 4500;
 type RevealPhase = 'intro' | 'exit' | 'settle' | 'done';
 
 function hasSeenReveal() {
@@ -48,12 +50,13 @@ export function PageReveal({ appReady, sceneReady }: PageRevealProps) {
   const [started, setStarted] = useState(false);
   const [phase, setPhase] = useState<RevealPhase>('intro');
   const [sceneFallbackReady, setSceneFallbackReady] = useState(false);
-  const [imagesReady, setImagesReady] = useState(false);
   const reducedMotion = useRef(false);
   const previouslyFocused = useRef<HTMLElement | null>(null);
   const unlockScrollRef = useRef<(() => void) | null>(null);
   const startedAtRef = useRef(0);
   const timersScheduledRef = useRef(false);
+
+  const images = useImagesLoaded({ viewportOnly: true, capMs: IMAGES_MAX_WAIT_MS, preloadSources: HOME_IMAGE_SOURCES });
 
   useEffect(() => {
     if (!shouldShow) return;
@@ -77,35 +80,6 @@ export function PageReveal({ appReady, sceneReady }: PageRevealProps) {
   }, [sceneReady, shouldShow]);
 
   useEffect(() => {
-    if (!shouldShow) return;
-    let done = false;
-    let consecutiveIdle = 0;
-    const finish = () => {
-      if (done) return;
-      done = true;
-      window.removeEventListener('load', onLoad);
-      window.clearInterval(poll);
-      window.clearTimeout(cap);
-      setImagesReady(true);
-    };
-    const onLoad = () => finish();
-    const poll = window.setInterval(() => {
-      const viewportH = window.innerHeight;
-      let pending = 0;
-      for (const img of Array.from(document.images)) {
-        const rect = img.getBoundingClientRect();
-        if (rect.width === 0 && rect.height === 0) continue;
-        if (rect.top >= viewportH || rect.bottom <= 0) continue;
-        if (!img.complete || img.naturalWidth === 0) pending++;
-      }
-      if (pending === 0) { consecutiveIdle++; if (consecutiveIdle >= 2) finish(); } else { consecutiveIdle = 0; }
-    }, 200);
-    const cap = window.setTimeout(finish, IMAGES_MAX_WAIT_MS);
-    window.addEventListener('load', onLoad);
-    return () => { done = true; window.removeEventListener('load', onLoad); window.clearInterval(poll); window.clearTimeout(cap); };
-  }, [shouldShow]);
-
-  useEffect(() => {
     if (!shouldShow || started) return;
     markRevealSeen();
     startedAtRef.current = performance.now();
@@ -113,16 +87,16 @@ export function PageReveal({ appReady, sceneReady }: PageRevealProps) {
   }, [shouldShow, started]);
 
   useEffect(() => {
-    if (!shouldShow || !started || !appReady || !imagesReady || (!sceneReady && !sceneFallbackReady) || timersScheduledRef.current) return;
+    if (!shouldShow || !started || !appReady || !images.ready || (!sceneReady && !sceneFallbackReady) || timersScheduledRef.current) return;
     timersScheduledRef.current = true;
     const duration = reducedMotion.current ? REDUCED_MOTION_MS : FULL_MOTION_MS;
     const elapsed = performance.now() - startedAtRef.current;
     const exitIn = Math.max(0, duration - 450 - elapsed);
     const exitTimer = window.setTimeout(() => setPhase('exit'), exitIn);
     const settleTimer = window.setTimeout(() => setPhase('settle'), exitIn + 350);
-    const doneTimer = window.setTimeout(() => setPhase('done'), exitIn + 650);
+    const doneTimer = window.setTimeout(() => setPhase('done'), exitIn + 700);
     return () => { window.clearTimeout(exitTimer); window.clearTimeout(settleTimer); window.clearTimeout(doneTimer); };
-  }, [appReady, sceneReady, sceneFallbackReady, imagesReady, shouldShow, started]);
+  }, [appReady, sceneReady, sceneFallbackReady, images.ready, shouldShow, started]);
 
   useEffect(() => {
     if (!shouldShow) return;
@@ -136,5 +110,12 @@ export function PageReveal({ appReady, sceneReady }: PageRevealProps) {
   useEffect(() => { if (phase === 'done') previouslyFocused.current?.focus({ preventScroll: true }); }, [phase]);
   if (!shouldShow || phase === 'done') return null;
 
-  return <div className={`page-reveal${started ? ' page-reveal--started' : ''}${phase === 'exit' || phase === 'settle' ? ' page-reveal--exit' : ''}${reducedMotion.current ? ' page-reveal--reduced' : ''}`} role="status" aria-live="polite" aria-label="NDA loading"><div className="page-reveal__stage" aria-hidden="true"><span className="page-reveal__wordmark">NDA</span><span className="page-reveal__caption">Senior By Default</span></div></div>;
+  const percent = Math.round(images.progress * 100);
+  const statusLabel = images.ready ? 'READY' : 'LOADING';
+
+  return <div className={`page-reveal${started ? ' page-reveal--started' : ''}${phase === 'exit' || phase === 'settle' ? ' page-reveal--exit' : ''}${reducedMotion.current ? ' page-reveal--reduced' : ''}`} role="status" aria-live="polite" aria-label="NDA loading">
+    <div className="page-reveal__stage" aria-hidden="true"><span className="page-reveal__wordmark">NDA</span><span className="page-reveal__caption">Senior By Default</span></div>
+    <div className="page-reveal__status" aria-hidden="true"><span className="page-reveal__status-label">{statusLabel}</span><span className="page-reveal__status-pct">{percent}%</span></div>
+    <div className="page-reveal__bar" aria-hidden="true"><span className="page-reveal__bar-fill" style={{ transform: `scaleX(${images.progress})` }} /></div>
+  </div>;
 }

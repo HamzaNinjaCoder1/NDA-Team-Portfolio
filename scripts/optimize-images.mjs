@@ -1,11 +1,12 @@
 import sharp from 'sharp';
-import { readdirSync, statSync, writeFileSync, renameSync, rmSync } from 'node:fs';
+import { readdirSync, statSync, writeFileSync, renameSync, rmSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dirs = [path.join(root, 'src', 'assets', 'images'), path.join(root, 'project images')];
 const MAX_DIM = 1600;
+const WEBP_MIN_FALLBACK = 10_000;
 
 function writeAtomic(target, buffer) {
   const tmp = `${target}.tmp`;
@@ -18,10 +19,41 @@ function writeAtomic(target, buffer) {
   }
 }
 
+async function writeWebpVariant(sourcePath, compareBytes) {
+  const before = statSync(sourcePath).size;
+  if (before < WEBP_MIN_FALLBACK || before < compareBytes * 0.95) return false;
+  let webp = null;
+  try {
+    const meta = await sharp(sourcePath).metadata();
+    webp = await sharp(sourcePath)
+      .rotate()
+      .resize({ width: MAX_DIM, height: MAX_DIM, fit: 'inside', withoutEnlargement: true })
+      .webp({ quality: meta.hasAlpha ? 80 : 72, effort: 4, alphaQuality: 90 })
+      .toBuffer();
+  } catch (err) {
+    webp = null;
+  }
+  if (!webp || webp.length >= compareBytes * 0.95) return false;
+  const webpTarget = sourcePath.replace(/\.(png|jpe?g)$/i, '.webp');
+  try {
+    if (!existsSync(webpTarget) || statSync(webpTarget).size !== webp.length) writeAtomic(webpTarget, webp);
+  } catch (err) {
+    console.warn(`[optimize-images] SKIP webp (locked/in use): ${webpTarget}`);
+    return false;
+  }
+  webpDone++;
+  webpBefore += before;
+  webpAfter += webp.length;
+  return true;
+}
+
 let totalBefore = 0;
 let totalAfter = 0;
 let done = 0;
 let skipped = 0;
+let webpDone = 0;
+let webpBefore = 0;
+let webpAfter = 0;
 const converted = [];
 
 const files = dirs.flatMap((dir) =>
@@ -30,12 +62,15 @@ const files = dirs.flatMap((dir) =>
 
 for (const file of files) {
   const before = statSync(file).size;
-  if (before < 40_000) { skipped++; totalBefore += before; totalAfter += before; continue; }
+  if (before < 40_000) {
+    await writeWebpVariant(file, before);
+    skipped++; totalBefore += before; totalAfter += before; continue;
+  }
 
   const meta = await sharp(file).metadata();
   const width = meta.width ?? 0;
   const height = meta.height ?? 0;
-  if ((width > 0 && width <= 900 && height > 0 && height <= 900)) { skipped++; totalBefore += before; totalAfter += before; continue; }
+  if ((width > 0 && width <= 900 && height > 0 && height <= 900)) { await writeWebpVariant(file, before); skipped++; totalBefore += before; totalAfter += before; continue; }
 
   let out = null;
   let target = file;
@@ -54,7 +89,7 @@ for (const file of files) {
     }
   }
 
-  if (!out || out.length >= before) { skipped++; totalAfter += before; continue; }
+  if (!out || out.length >= before) { await writeWebpVariant(target, before); skipped++; totalAfter += before; continue; }
 
   try {
     writeAtomic(target, out);
@@ -68,9 +103,14 @@ for (const file of files) {
   done++;
   totalBefore += before;
   totalAfter += out.length;
+
+  await writeWebpVariant(target, out.length);
 }
 
 console.log(`[optimize-images] compressed ${done} file(s), skipped ${skipped}, ${(totalBefore / 1048576).toFixed(1)}MB -> ${(totalAfter / 1048576).toFixed(1)}MB (${Math.max(0, Math.round(100 - (totalAfter / Math.max(totalBefore, 1)) * 100))}% smaller)`);
+if (webpDone) {
+  console.log(`[optimize-images] webp variants: ${webpDone} file(s), ${(webpBefore / 1048576).toFixed(1)}MB -> ${(webpAfter / 1048576).toFixed(1)}MB (${Math.max(0, Math.round(100 - (webpAfter / Math.max(webpBefore, 1)) * 100))}% smaller)`);
+}
 if (converted.length) {
   console.log('[optimize-images] CONVERTED PNG -> JPG:');
   for (const f of converted) console.log('  ' + f);

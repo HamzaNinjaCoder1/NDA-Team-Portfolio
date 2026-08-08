@@ -6,6 +6,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import laptopScreenImg from '../assets/images/laptop-screen.jpg?url';
+import laptopScreenImgWebp from '../assets/images/laptop-screen.webp?url';
+import { supportsWebp } from '../lib/imageSupport';
 
 interface Laptop3DCanvasProps {
   activeStepIndex?: number;
@@ -24,7 +26,7 @@ const MODEL_URL = 'https://ksenia-k.com/models/mac-noUv.glb';
 const KEYBOARD_OVERLAY_URL = 'https://ksenia-k.com/img/threejs/keyboard-overlay.png';
 
 const SCREEN_IMAGES = [
-  laptopScreenImg,
+  supportsWebp() ? laptopScreenImgWebp : laptopScreenImg,
 ];
 
 const SCREEN_COPY = [
@@ -382,8 +384,29 @@ export function Laptop3DCanvas({ activeStepIndex = 0 }: Laptop3DCanvasProps) {
         }
       };
       image.onerror = (error) => {
-        console.error('Failed to load laptop screen image:', error, 'URL:', url);
         if (cancelled) return;
+        if (url === laptopScreenImgWebp) {
+          const retry = new Image();
+          retry.crossOrigin = 'anonymous';
+          retry.onload = () => {
+            if (cancelled) return;
+            const texture = createStepScreenTexture(retry, index);
+            stepTexturesRef.current[index] = texture;
+            if (screenMaterialRef.current) {
+              screenMaterialRef.current.map = texture;
+              screenMaterialRef.current.opacity = 0.96;
+              screenMaterialRef.current.needsUpdate = true;
+              if (screenLight) screenLight.intensity = 1.5;
+            }
+          };
+          retry.onerror = () => {
+            if (cancelled) return;
+            stepTexturesRef.current[index] = createStepScreenTexture(null, index);
+          };
+          retry.src = laptopScreenImg;
+          return;
+        }
+        console.error('Failed to load laptop screen image:', error, 'URL:', url);
         stepTexturesRef.current[index] = createStepScreenTexture(null, index);
       };
       image.src = url;
