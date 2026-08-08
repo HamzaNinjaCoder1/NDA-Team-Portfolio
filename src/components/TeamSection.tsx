@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { SitePath } from '../site';
-import alexPhoto from '../../project images/Alex.png';
-import nakashimaPhoto from '../../project images/Nakashima.png';
-import oleksandrPhoto from '../../project images/Oleksandr.png';
+import alexPhoto from '../../project images/Alex.jpg';
+import nakashimaPhoto from '../../project images/Nakashima.jpg';
+import oleksandrPhoto from '../../project images/Oleksandr.jpg';
 
 interface TeamMember {
   id: string;

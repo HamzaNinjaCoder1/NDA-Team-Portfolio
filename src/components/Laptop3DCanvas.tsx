@@ -5,7 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
-import laptopScreenImg from '../assets/images/laptop-screen.png?url';
+import laptopScreenImg from '../assets/images/laptop-screen.jpg?url';
 
 interface Laptop3DCanvasProps {
   activeStepIndex?: number;

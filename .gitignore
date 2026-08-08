@@ -6,3 +6,11 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Stray project files not used by the app
+TODO.md
+metadata.json
+bun.lock
+MEMOTOCLINIC.png
+Screenshot*.png
+project images/game.png

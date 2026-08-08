@@ -1,15 +1,15 @@
 import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
 import evermergeImage from '../../project images/EverMerge.jpg';
-import musicRacingImage from '../../project images/Music Racing.png';
-import dragaliaImage from '../../project images/Dragalia Lost.png';
-import rollbitImage from '../../project images/rollbit.png';
-import rajampoImage from '../../project images/rajampo.png';
-import sodashiImage from '../../project images/SODASHI.png';
-import dividendImage from '../../project images/DIVIDEND.png';
-import needsBankImage from '../../project images/NeedsBank.png';
+import musicRacingImage from '../../project images/Music Racing.jpg';
+import dragaliaImage from '../../project images/Dragalia Lost.jpg';
+import rollbitImage from '../../project images/rollbit.jpg';
+import rajampoImage from '../../project images/rajampo.jpg';
+import sodashiImage from '../../project images/SODASHI.jpg';
+import dividendImage from '../../project images/DIVIDEND.jpg';
+import needsBankImage from '../../project images/NeedsBank.jpg';
 import doctoreImage from '../../project images/Lotus car.png';
-import chatImage from '../../project images/chatswap.png';
+import chatImage from '../../project images/chatswap.jpg';
 
 const projects = [
   { title: 'EverMerge', category: 'Mobile game', stack: 'Unity · C#', image: evermergeImage, description: 'A polished puzzle-world experience made for long sessions and playful discovery.' },

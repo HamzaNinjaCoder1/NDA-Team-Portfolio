@@ -4,6 +4,7 @@ const STORAGE_KEY = 'nda-page-reveal-seen';
 const FULL_MOTION_MS = 3000;
 const REDUCED_MOTION_MS = 520;
 const SCENE_FALLBACK_MS = 2200;
+const IMAGES_MAX_WAIT_MS = 4200;
 type RevealPhase = 'intro' | 'exit' | 'settle' | 'done';
 
 function hasSeenReveal() {
@@ -47,6 +48,7 @@ export function PageReveal({ appReady, sceneReady }: PageRevealProps) {
   const [started, setStarted] = useState(false);
   const [phase, setPhase] = useState<RevealPhase>('intro');
   const [sceneFallbackReady, setSceneFallbackReady] = useState(false);
+  const [imagesReady, setImagesReady] = useState(false);
   const reducedMotion = useRef(false);
   const previouslyFocused = useRef<HTMLElement | null>(null);
   const unlockScrollRef = useRef<(() => void) | null>(null);
@@ -75,6 +77,35 @@ export function PageReveal({ appReady, sceneReady }: PageRevealProps) {
   }, [sceneReady, shouldShow]);
 
   useEffect(() => {
+    if (!shouldShow) return;
+    let done = false;
+    let consecutiveIdle = 0;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      window.removeEventListener('load', onLoad);
+      window.clearInterval(poll);
+      window.clearTimeout(cap);
+      setImagesReady(true);
+    };
+    const onLoad = () => finish();
+    const poll = window.setInterval(() => {
+      const viewportH = window.innerHeight;
+      let pending = 0;
+      for (const img of Array.from(document.images)) {
+        const rect = img.getBoundingClientRect();
+        if (rect.width === 0 && rect.height === 0) continue;
+        if (rect.top >= viewportH || rect.bottom <= 0) continue;
+        if (!img.complete || img.naturalWidth === 0) pending++;
+      }
+      if (pending === 0) { consecutiveIdle++; if (consecutiveIdle >= 2) finish(); } else { consecutiveIdle = 0; }
+    }, 200);
+    const cap = window.setTimeout(finish, IMAGES_MAX_WAIT_MS);
+    window.addEventListener('load', onLoad);
+    return () => { done = true; window.removeEventListener('load', onLoad); window.clearInterval(poll); window.clearTimeout(cap); };
+  }, [shouldShow]);
+
+  useEffect(() => {
     if (!shouldShow || started) return;
     markRevealSeen();
     startedAtRef.current = performance.now();
@@ -82,7 +113,7 @@ export function PageReveal({ appReady, sceneReady }: PageRevealProps) {
   }, [shouldShow, started]);
 
   useEffect(() => {
-    if (!shouldShow || !started || !appReady || (!sceneReady && !sceneFallbackReady) || timersScheduledRef.current) return;
+    if (!shouldShow || !started || !appReady || !imagesReady || (!sceneReady && !sceneFallbackReady) || timersScheduledRef.current) return;
     timersScheduledRef.current = true;
     const duration = reducedMotion.current ? REDUCED_MOTION_MS : FULL_MOTION_MS;
     const elapsed = performance.now() - startedAtRef.current;
@@ -91,7 +122,7 @@ export function PageReveal({ appReady, sceneReady }: PageRevealProps) {
     const settleTimer = window.setTimeout(() => setPhase('settle'), exitIn + 350);
     const doneTimer = window.setTimeout(() => setPhase('done'), exitIn + 650);
     return () => { window.clearTimeout(exitTimer); window.clearTimeout(settleTimer); window.clearTimeout(doneTimer); };
-  }, [appReady, sceneReady, sceneFallbackReady, shouldShow, started]);
+  }, [appReady, sceneReady, sceneFallbackReady, imagesReady, shouldShow, started]);
 
   useEffect(() => {
     if (!shouldShow) return;

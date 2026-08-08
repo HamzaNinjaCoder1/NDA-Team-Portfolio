@@ -3,8 +3,8 @@ import { ArrowUpRight } from 'lucide-react';
 import { SitePath } from '../site';
 
 // Import project images
-import musicRacingImage from '../../project images/Music Racing.png';
-import rajampoImage from '../../project images/rajampo.png';
+import musicRacingImage from '../../project images/Music Racing.jpg';
+import rajampoImage from '../../project images/rajampo.jpg';
 import evermergeImage from '../../project images/EverMerge.jpg';
 import doctoreImage from '../../project images/Lotus car.png';
 
