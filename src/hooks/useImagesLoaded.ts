@@ -23,7 +23,6 @@ export function useImagesLoaded(options: UseImagesLoadedOptions = {}) {
     const finish = () => {
       if (done) return;
       done = true;
-      window.removeEventListener('load', onLoad);
       window.clearInterval(poll);
       window.clearTimeout(cap);
       setReady(true);
@@ -67,14 +66,11 @@ export function useImagesLoaded(options: UseImagesLoadedOptions = {}) {
     }
 
     const poll = window.setInterval(update, pollMs);
-    const onLoad = () => finish();
-    window.addEventListener('load', onLoad);
     const cap = window.setTimeout(finish, capMs);
     const kick = window.setTimeout(update, 250);
 
     return () => {
       done = true;
-      window.removeEventListener('load', onLoad);
       window.clearInterval(poll);
       window.clearTimeout(cap);
       window.clearTimeout(kick);

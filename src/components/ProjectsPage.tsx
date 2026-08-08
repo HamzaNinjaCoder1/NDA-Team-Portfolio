@@ -50,7 +50,7 @@ const Reveal = ({ children, delay = 0, className = '' }: { children: React.React
 
 export function ProjectsPage({ onNavigate }: { onNavigate: () => void }) {
   const gridRef = useRef<HTMLDivElement>(null);
-  const images = useImagesLoaded({ containerRef: gridRef, capMs: 4000 });
+  const images = useImagesLoaded({ containerRef: gridRef, capMs: 5500 });
   const [minTimePassed, setMinTimePassed] = useState(false);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export function ProjectsPage({ onNavigate }: { onNavigate: () => void }) {
 
     <AnimatePresence>
       {loading && (
-        <motion.div key="projects-loader" exit={{ opacity: 0, transition: { duration: 0.45, ease: 'easeOut' } }} className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#F2F2F2]" role="status" aria-live="polite" aria-label="Loading projects">
+        <motion.div key="projects-loader" exit={{ opacity: 0, transition: { duration: 0.45, ease: 'easeOut' } }} className="fixed inset-0 z-[70] flex flex-col items-center justify-center bg-[#F2F2F2]" role="status" aria-live="polite" aria-label="Loading projects">
           <p className="font-mono text-[10px] font-bold tracking-[.3em] text-black/50">LOADING PROJECTS</p>
           <div className="mt-5 h-px w-52 overflow-hidden bg-black/10"><span className="block h-full origin-left bg-black transition-transform duration-200 ease-out" style={{ transform: `scaleX(${images.progress})` }} /></div>
           <p className="mt-3 font-mono text-[10px] font-bold text-black/70">{Math.round(images.progress * 100)}%</p>

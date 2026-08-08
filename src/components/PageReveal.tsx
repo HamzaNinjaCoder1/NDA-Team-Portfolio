@@ -6,7 +6,7 @@ const STORAGE_KEY = 'nda-page-reveal-seen';
 const FULL_MOTION_MS = 3000;
 const REDUCED_MOTION_MS = 520;
 const SCENE_FALLBACK_MS = 2200;
-const IMAGES_MAX_WAIT_MS = 4500;
+const IMAGES_MAX_WAIT_MS = 6000;
 type RevealPhase = 'intro' | 'exit' | 'settle' | 'done';
 
 function hasSeenReveal() {
@@ -103,7 +103,7 @@ export function PageReveal({ appReady, sceneReady }: PageRevealProps) {
     const watchdog = window.setTimeout(() => {
       markRevealSeen();
       setPhase('done');
-    }, SCENE_FALLBACK_MS + FULL_MOTION_MS + 1200);
+    }, SCENE_FALLBACK_MS + FULL_MOTION_MS + 3200);
     return () => window.clearTimeout(watchdog);
   }, [shouldShow]);
 
@@ -111,7 +111,7 @@ export function PageReveal({ appReady, sceneReady }: PageRevealProps) {
   if (!shouldShow || phase === 'done') return null;
 
   const percent = Math.round(images.progress * 100);
-  const statusLabel = images.ready ? 'READY' : 'LOADING';
+  const statusLabel = images.progress >= 1 ? 'READY' : 'LOADING';
 
   return <div className={`page-reveal${started ? ' page-reveal--started' : ''}${phase === 'exit' || phase === 'settle' ? ' page-reveal--exit' : ''}${reducedMotion.current ? ' page-reveal--reduced' : ''}`} role="status" aria-live="polite" aria-label="NDA loading">
     <div className="page-reveal__stage" aria-hidden="true"><span className="page-reveal__wordmark">NDA</span><span className="page-reveal__caption">Senior By Default</span></div>
