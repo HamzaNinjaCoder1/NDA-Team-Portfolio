@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nda.work.gd/sitemap.xml

@@ -1,0 +1,153 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   shadcn/ui design tokens (light theme) mapped for Tailwind v4.
+   These enable utilities like bg-primary, bg-card, border-border, bg-background,
+   bg-muted, ring-ring, etc. and expose raw HSL vars used in inline styles
+   (e.g. hsl(var(--border)), hsl(var(--background))).
+   --------------------------------------------------------------------------- */
+:root {
+  --background: 0 0% 95%;
+  --foreground: 0 0% 4%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 4%;
+  --primary: 0 0% 4%;
+  --primary-foreground: 0 0% 95%;
+  --muted: 0 0% 91%;
+  --muted-foreground: 0 0% 42%;
+  --border: 0 0% 87%;
+  --ring: 0 0% 4%;
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-border: hsl(var(--border));
+  --color-ring: hsl(var(--ring));
+}
+
+/* Guard against horizontal overflow WITHOUT breaking position: sticky.
+   overflow-x: clip clips exactly like hidden but, unlike hidden, does NOT
+   create a scroll container on html/body — so sticky elements keep sticking
+   to the viewport. (overflow: hidden here is what was silently killing the
+   laptop's sticky — it turns html/body into a scroll container.) */
+html,
+body {
+  overflow-x: clip;
+  scrollbar-gutter: stable;
+}
+
+.page-reveal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: radial-gradient(80rem 50rem at 50% 42%, rgba(17, 17, 17, 1) 0%, rgba(7, 7, 7, 1) 62%);
+  color: #f5f5f5;
+  pointer-events: auto;
+  contain: strict;
+  opacity: 1;
+}
+
+.page-reveal__stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page-reveal__wordmark {
+  font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(5.5rem, 15vw, 12.5rem);
+  font-weight: 900;
+  line-height: 0.85;
+  text-transform: uppercase;
+  color: #fafafa;
+  opacity: 0;
+  transform: translate3d(0, 26px, 0);
+  will-change: transform, opacity;
+}
+
+.page-reveal__caption {
+  margin-top: clamp(1rem, 2.4vw, 1.4rem);
+  padding-left: 0.5em;
+  font-family: ui-monospace, 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: rgba(250, 250, 250, 0.55);
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
+  will-change: transform, opacity;
+}
+
+.page-reveal--started .page-reveal__wordmark { animation: nd-sf-in .9s cubic-bezier(.16, 1, .3, 1) .1s forwards; }
+.page-reveal--started .page-reveal__caption { animation: nd-sf-caption-in .7s cubic-bezier(.16, 1, .3, 1) .45s forwards; }
+.page-reveal--started { animation: nd-shutter-up .7s cubic-bezier(.76, 0, .24, 1) 2.45s forwards; }
+.page-reveal--exit { pointer-events: none; }
+
+.page-reveal--reduced.page-reveal--started { animation: nd-reduced-out .3s ease-out .2s forwards; }
+.page-reveal--reduced .page-reveal__wordmark,
+.page-reveal--reduced .page-reveal__caption { opacity: 1; transform: none; animation: none; }
+
+@keyframes nd-sf-in { from { opacity: 0; transform: translate3d(0, 26px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+@keyframes nd-sf-caption-in { from { opacity: 0; transform: translate3d(0, 10px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+@keyframes nd-shutter-up { to { transform: translate3d(0, -100%, 0); pointer-events: none; } }
+@keyframes nd-reduced-out { to { opacity: 0; pointer-events: none; } }
+
+@layer utilities {
+  @keyframes slideLeft {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-slideLeft {
+    animation: slideLeft 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.25s ease-out forwards;
+  }
+}
+
+/* Custom smooth scrollbar for controls drawer */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}

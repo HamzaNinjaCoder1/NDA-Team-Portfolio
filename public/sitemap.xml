@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://nda.work.gd/</loc><priority>1.0</priority></url>
+  <url><loc>https://nda.work.gd/about</loc><priority>0.9</priority></url>
+  <url><loc>https://nda.work.gd/team</loc><priority>0.9</priority></url>
+  <url><loc>https://nda.work.gd/projects</loc><priority>0.9</priority></url>
+  <url><loc>https://nda.work.gd/services</loc><priority>0.8</priority></url>
+  <url><loc>https://nda.work.gd/technologies</loc><priority>0.8</priority></url>
+  <url><loc>https://nda.work.gd/process</loc><priority>0.8</priority></url>
+  <url><loc>https://nda.work.gd/testimonials</loc><priority>0.7</priority></url>
+  <url><loc>https://nda.work.gd/contact</loc><priority>0.9</priority></url>
+</urlset>
