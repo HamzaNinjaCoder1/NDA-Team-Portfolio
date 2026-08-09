@@ -25,6 +25,7 @@ export function useImagesLoaded(options: UseImagesLoadedOptions = {}) {
       done = true;
       window.clearInterval(poll);
       window.clearTimeout(cap);
+      setProgress(1);
       setReady(true);
     };
 
@@ -42,8 +43,7 @@ export function useImagesLoaded(options: UseImagesLoadedOptions = {}) {
         if (img.complete && img.naturalWidth > 0) loaded++;
       }
       if (total === 0) {
-        setProgress(1);
-        finish();
+        setProgress(0);
         return;
       }
       const p = Math.min(1, loaded / total);

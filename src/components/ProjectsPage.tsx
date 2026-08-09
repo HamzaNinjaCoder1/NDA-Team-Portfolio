@@ -50,7 +50,7 @@ const Reveal = ({ children, delay = 0, className = '' }: { children: React.React
 
 export function ProjectsPage({ onNavigate }: { onNavigate: () => void }) {
   const gridRef = useRef<HTMLDivElement>(null);
-  const images = useImagesLoaded({ containerRef: gridRef, capMs: 5500 });
+  const images = useImagesLoaded({ containerRef: gridRef, capMs: 10000 });
   const [minTimePassed, setMinTimePassed] = useState(false);
 
   useEffect(() => {

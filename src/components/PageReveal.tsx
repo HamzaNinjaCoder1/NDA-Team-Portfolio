@@ -6,7 +6,7 @@ const STORAGE_KEY = 'nda-page-reveal-seen';
 const FULL_MOTION_MS = 3000;
 const REDUCED_MOTION_MS = 520;
 const SCENE_FALLBACK_MS = 2200;
-const IMAGES_MAX_WAIT_MS = 6000;
+const IMAGES_MAX_WAIT_MS = 10000;
 type RevealPhase = 'intro' | 'exit' | 'settle' | 'done';
 
 function hasSeenReveal() {
@@ -97,15 +97,6 @@ export function PageReveal({ appReady, sceneReady }: PageRevealProps) {
     const doneTimer = window.setTimeout(() => setPhase('done'), exitIn + 700);
     return () => { window.clearTimeout(exitTimer); window.clearTimeout(settleTimer); window.clearTimeout(doneTimer); };
   }, [appReady, sceneReady, sceneFallbackReady, images.ready, shouldShow, started]);
-
-  useEffect(() => {
-    if (!shouldShow) return;
-    const watchdog = window.setTimeout(() => {
-      markRevealSeen();
-      setPhase('done');
-    }, SCENE_FALLBACK_MS + FULL_MOTION_MS + 3200);
-    return () => window.clearTimeout(watchdog);
-  }, [shouldShow]);
 
   useEffect(() => { if (phase === 'done') previouslyFocused.current?.focus({ preventScroll: true }); }, [phase]);
   if (!shouldShow || phase === 'done') return null;
