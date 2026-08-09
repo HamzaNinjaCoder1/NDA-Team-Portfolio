@@ -23,7 +23,7 @@ interface TeamMember {
 const TEAM_MEMBERS: TeamMember[] = [
   {
     id: 'daniel-viloria',
-    name: 'Daniel Andres Viloria',
+    name: 'Oleksandr Balarnovich',
     role: 'Senior Full Stack Software Engineer',
     company: 'NDA Studio',
     quote: '"True engineering is not just building code, but crafting reliable systems that transform complex requirements into seamless digital experiences."',
@@ -43,7 +43,7 @@ const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     id: 'oleksandr-balanovich',
-    name: 'Oleksandr Balanovich',
+    name: 'Daniel Andres Viloria',
     role: 'Team Manager',
     company: 'NDA Studio',
     quote: '"A project workflow should feel like a well-orchestrated symphony—clear, deliberate, and deeply aligned from planning to final delivery."',

@@ -8,12 +8,12 @@ export type SitePath = typeof NAV_ITEMS[number][1];
 
 export const TEAM = [
   {
-    name: 'Daniel Andres Viloria', country: 'Colombia', initials: 'DV',
+    name: 'Oleksandr Balarnovich', country: 'Colombia', initials: 'OB',
     role: 'Senior Full Stack Software Engineer',
     summary: 'Senior engineer focused on reliable, end-to-end software products and cloud-ready delivery.',
     strengths: ['Full-stack architecture', 'Product delivery', 'Cloud & DevOps'],
     skills: ['React', 'Next.js', 'TypeScript', 'Node.js', 'Python', 'AWS', 'Docker', 'Laravel', 'PHP', 'Vue', 'React Native', 'Django', 'Rust', 'Go', 'Java'],
-    link: 'https://danielviloria2801.vercel.app/',
+    link: 'https://www.linkedin.com/in/oleksandr-balanovichy-1b9255393/',
   },
   {
     name: 'Nakashima Radon', country: 'Japan', initials: 'NR',
@@ -24,11 +24,11 @@ export const TEAM = [
     link: 'https://otw-nr.web.app/',
   },
   {
-    name: 'Oleksandr Balanovich', country: 'Ukraine', initials: 'OB',
+    name: 'Daniel Andres Viloria', country: 'Ukraine', initials: 'DV',
     role: 'Team Manager',
     summary: 'Leads project planning, client communication, team management, and delivery coordination across the team.',
     strengths: ['Project planning', 'Client communication', 'Agile workflow', 'Team leadership', 'Delivery coordination'],
     skills: ['Team leadership', 'Project coordination', 'Client communication', 'Agile planning', 'Delivery coordination'],
-    link: undefined,
+    link: 'https://danielviloria2801.vercel.app/',
   },
 ] as const;
