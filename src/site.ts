@@ -8,7 +8,7 @@ export type SitePath = typeof NAV_ITEMS[number][1];
 
 export const TEAM = [
   {
-    name: 'Oleksandr Balarnovich', country: 'Colombia', initials: 'OB',
+    name: 'Oleksandr Balarnovich', country: 'Ukraine', initials: 'OB',
     role: 'Senior Full Stack Software Engineer',
     summary: 'Senior engineer focused on reliable, end-to-end software products and cloud-ready delivery.',
     strengths: ['Full-stack architecture', 'Product delivery', 'Cloud & DevOps'],
@@ -24,7 +24,7 @@ export const TEAM = [
     link: 'https://otw-nr.web.app/',
   },
   {
-    name: 'Daniel Andres Viloria', country: 'Ukraine', initials: 'DV',
+    name: 'Daniel Andres Viloria', country: 'Colombia', initials: 'DV',
     role: 'Team Manager',
     summary: 'Leads project planning, client communication, team management, and delivery coordination across the team.',
     strengths: ['Project planning', 'Client communication', 'Agile workflow', 'Team leadership', 'Delivery coordination'],
